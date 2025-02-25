@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alertes - Appli IOT</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #e0e0e0;
+            color: #333;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .navbar {
+            background-color: #e50914;
+            color: #fff;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            border-bottom-left-radius: 15px;
+            border-bottom-right-radius: 15px;
+        }
+        .navbar .title { font-size: 1.5em; font-weight: bold; }
+        .notifications {
+            width: 90%;
+            margin: 20px auto;
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+        .notification-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 15px;
+            border-bottom: 1px solid #ddd;
+        }
+        .notification-item:last-child { border-bottom: none; }
+        .notification-item i {
+            font-size: 1.8em;
+            color: red;
+            margin-right: 15px;
+        }
+        .notification-text { font-size: 1em; flex: 1; }
+        .notification-actions {
+            display: flex;
+            gap: 10px;
+        }
+        .delete-btn, .increase-temp-btn {
+            background: #e50914;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .footer-menu {
+            background-color: #000;
+            color: #fff;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            padding: 15px;
+            width: 100%;
+            border-top-left-radius: 15px;
+            border-top-right-radius: 15px;
+            position: fixed;
+            bottom: 0;
+        }
+        .footer-menu i { font-size: 1.5em; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <div class="title">Alertes</div>
+        <div class="icons">
+            <a href="index.html"><i class="fas fa-home"></i></a>
+        </div>
+    </div>
+
+    <div class="notifications" id="notificationsList">
+        <h2>Notifications</h2>
+    </div>
+
+    <div class="footer-menu">
+        <i class="fas fa-home"></i>
+        <i class="fas fa-bell"></i>
+        <i class="fas fa-info-circle"></i>
+        <i class="fas fa-sign-out-alt"></i>
+    </div>
+
+    <script>
+        let notifications = [
+            { time: '14:30', date: '24/02/2025', temp: 10 },
+            { time: '13:15', date: '24/02/2025', temp: 12 },
+            { time: '11:50', date: '24/02/2025', temp: 9 },
+            { time: '09:20', date: '24/02/2025', temp: 8 }
+        ];
+
+        function loadNotifications() {
+            const list = document.getElementById('notificationsList');
+            list.innerHTML = '<h2>Notifications</h2>';
+            
+            notifications.forEach((alert, index) => {
+                const item = document.createElement('div');
+                item.classList.add('notification-item');
+                item.innerHTML = `
+                    <i class="fas fa-exclamation-circle"></i>
+                    <div class="notification-text">Température basse détectée: ${alert.temp}°C le ${alert.date} à ${alert.time}</div>
+                    <div class="notification-actions">
+                        <button class="increase-temp-btn" onclick="increaseTemperature(${index})">+1°C</button>
+                        <button class="delete-btn" onclick="deleteNotification(${index})">&times;</button>
+                    </div>
+                `;
+                list.appendChild(item);
+            });
+        }
+
+        function deleteNotification(index) {
+            notifications.splice(index, 1);
+            loadNotifications();
+        }
+
+        function increaseTemperature(index) {
+            if (notifications[index].temp < 25) {
+                notifications[index].temp += 1;
+            }
+            if (notifications[index].temp >= 25) {
+                deleteNotification(index);
+            } else {
+                loadNotifications();
+            }
+        }
+
+        window.onload = loadNotifications;
+    </script>
+</body>
+</html>

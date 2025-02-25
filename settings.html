@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Connexion - Appli IOT</title>
+    <title>Paramètres - Appli IOT</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <style>
         * {
@@ -14,16 +14,21 @@
 
         body {
             font-family: 'Poppins', sans-serif;
-            background: linear-gradient(135deg, #e50914, #1e1e1e);
-            color: #fff;
+            background-color: #e0e0e0;
+            color: #333;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
             transition: background-color 0.5s, color 0.5s;
         }
 
+        .dark-mode {
+            background-color: #1e1e1e;
+            color: #f0f0f0;
+        }
+
         .navbar {
-            background-color: rgba(0, 0, 0, 0.7);
+            background-color: #e50914;
             color: #fff;
             padding: 20px;
             display: flex;
@@ -36,88 +41,89 @@
         .navbar .title {
             font-size: 1.5em;
             font-weight: bold;
-            text-shadow: 2px 2px 5px #000;
         }
 
         .navbar .icons i {
             margin-left: 20px;
             font-size: 1.5em;
             cursor: pointer;
-            transition: transform 0.3s;
-        }
-
-        .navbar .icons i:hover {
-            transform: scale(1.2);
         }
 
         .main-content {
             flex: 1;
-            display: flex;
-            justify-content: center;
-            align-items: center;
             padding: 20px;
-            backdrop-filter: blur(10px);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
         }
 
-        .login-container {
-            background: rgba(255, 255, 255, 0.2);
-            border: 2px solid rgba(255, 255, 255, 0.5);
+        .settings-container {
+            background-color: #fff;
             border-radius: 20px;
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5);
-            padding: 40px;
-            width: 100%;
-            max-width: 400px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            padding: 30px;
+            width: 80%;
             text-align: center;
-            backdrop-filter: blur(15px);
+            transition: background-color 0.5s, color 0.5s;
         }
 
-        .login-container h2 {
+        .dark-mode .settings-container {
+            background-color: #333;
+            color: #fff;
+        }
+
+        .settings-container h2 {
             margin-bottom: 20px;
-            color: #fff;
-            text-shadow: 2px 2px 5px #000;
         }
 
-        .login-container input {
-            width: 100%;
-            padding: 15px;
-            margin: 15px 0;
-            border: none;
-            border-radius: 10px;
-            font-size: 1em;
-            background-color: rgba(255, 255, 255, 0.2);
-            color: #fff;
-            outline: none;
-            transition: background-color 0.3s;
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 34px;
         }
 
-        .login-container input::placeholder {
-            color: #fff;
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
         }
 
-        .login-container input:focus {
-            background-color: rgba(255, 255, 255, 0.4);
-        }
-
-        .login-container button {
-            margin-top: 20px;
-            padding: 15px;
-            width: 100%;
-            border: none;
-            border-radius: 10px;
-            background: linear-gradient(135deg, #e50914, #ff4500);
-            color: #fff;
-            font-size: 1.2em;
+        .slider {
+            position: absolute;
             cursor: pointer;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5);
-            transition: transform 0.3s;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 34px;
         }
 
-        .login-container button:hover {
-            transform: translateY(-5px);
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider {
+            background-color: #e50914;
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(26px);
         }
 
         .footer-menu {
-            background-color: rgba(0, 0, 0, 0.7);
+            background-color: #000;
             color: #fff;
             display: flex;
             justify-content: space-around;
@@ -125,59 +131,96 @@
             padding: 15px;
             border-top-left-radius: 15px;
             border-top-right-radius: 15px;
-            position: fixed;
-            bottom: 0;
-            width: 100%;
+        }
+
+        .footer-menu .notification {
+            position: relative;
+        }
+
+        .footer-menu .notification .badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background-color: red;
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8em;
         }
 
         .footer-menu i {
             font-size: 1.5em;
             cursor: pointer;
-            transition: transform 0.3s;
-        }
-
-        .footer-menu i:hover {
-            transform: scale(1.2);
         }
     </style>
 </head>
 <body>
     <div class="navbar">
-        <div class="title">Connexion</div>
+        <div class="title">Paramètres</div>
         <div class="icons">
             <a href="index.html"><i class="fas fa-home"></i></a>
         </div>
     </div>
 
     <div class="main-content">
-        <div class="login-container">
-            <h2>Connexion à Appli IOT</h2>
-            <input type="text" id="username" placeholder="Nom d'utilisateur" required>
-            <input type="password" id="password" placeholder="Mot de passe" required>
-            <button onclick="login()">🚀 Se connecter</button>
+        <div class="settings-container">
+            <h2>Paramètres de l'application</h2>
+            <div>
+                <label class="toggle-switch">
+                    <input type="checkbox" id="darkModeToggle">
+                    <span class="slider"></span>
+                </label>
+                <p>Activer/Désactiver Mode Sombre</p>
+            </div>
+            <div>
+                <label class="toggle-switch">
+                    <input type="checkbox" id="notificationToggle">
+                    <span class="slider"></span>
+                </label>
+                <p>Activer/Désactiver Notifications</p>
+            </div>
         </div>
     </div>
 
     <div class="footer-menu">
         <i class="fas fa-home"></i>
-        <i class="fas fa-bell"></i>
+        <div class="notification">
+            <i class="fas fa-bell" id="notificationIcon"></i>
+            <div class="badge" id="notificationBadge">1</div>
+        </div>
         <i class="fas fa-info-circle"></i>
         <i class="fas fa-sign-out-alt"></i>
     </div>
 
     <script>
-        function login() {
-            const username = document.getElementById('username').value;
-            const password = document.getElementById('password').value;
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const notificationToggle = document.getElementById('notificationToggle');
+        const notificationBadge = document.getElementById('notificationBadge');
 
-            if (username === 'admin' && password === 'password') {
-                window.location.href = 'index.html';
+        darkModeToggle.addEventListener('change', function () {
+            if (this.checked) {
+                localStorage.setItem('dark-mode', 'true');
             } else {
-                alert('Identifiants incorrects !');
+                localStorage.setItem('dark-mode', 'false');
             }
-        }
+            applyDarkModeToAllPages();
+        });
 
-        function applyDarkMode() {
+        notificationToggle.addEventListener('change', function () {
+            if (this.checked) {
+                notificationBadge.style.display = 'flex';
+                localStorage.setItem('notifications', 'true');
+            } else {
+                notificationBadge.style.display = 'none';
+                localStorage.setItem('notifications', 'false');
+            }
+        });
+
+        function applyDarkModeToAllPages() {
             const isDarkMode = localStorage.getItem('dark-mode') === 'true';
             if (isDarkMode) {
                 document.body.classList.add('dark-mode');
@@ -186,7 +229,17 @@
             }
         }
 
-        window.onload = applyDarkMode;
+        function loadSettings() {
+            const isDarkMode = localStorage.getItem('dark-mode') === 'true';
+            darkModeToggle.checked = isDarkMode;
+            applyDarkModeToAllPages();
+
+            const notificationsEnabled = localStorage.getItem('notifications') === 'true';
+            notificationToggle.checked = notificationsEnabled;
+            notificationBadge.style.display = notificationsEnabled ? 'flex' : 'none';
+        }
+
+        window.onload = loadSettings;
     </script>
 </body>
 </html>
